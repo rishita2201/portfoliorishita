@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R. Rishita — AIML Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-alt:#f6f7f9;
+    --ink:#12203c;
+    --ink-soft:#4a5568;
+    --line:#e2e5ea;
+    --teal:#0f6b62;
+    --teal-deep:#0b4f49;
+    --gold:#b8912f;
+    --card:#ffffff;
+    --max:1120px;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 32px;}
+  @media (max-width:640px){.wrap{padding:0 20px;}}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:64px;
+  }
+  .brand{font-weight:700;font-size:18px;letter-spacing:0.02em;}
+  .brand .dot{color:var(--teal);}
+  .navlinks{display:flex;gap:32px;font-size:14px;font-weight:500;color:var(--ink-soft);}
+  .navlinks a{padding:4px 0;border-bottom:2px solid transparent;transition:border-color .2s, color .2s;}
+  .navlinks a:hover{color:var(--ink);border-color:var(--teal);}
+  .nav-cta{
+    font-size:13px;font-weight:600;color:#fff;background:var(--teal);
+    padding:9px 16px;border-radius:var(--radius);
+    letter-spacing:0.01em;
+  }
+  .nav-cta:hover{background:var(--teal-deep);}
+  .menu-btn{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink);}
+  @media (max-width:860px){
+    .navlinks{display:none;}
+    .nav-cta{display:none;}
+    .menu-btn{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:88px 0 56px;
+    border-bottom:1px solid var(--line);
+    background:
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1.3fr 0.9fr;gap:48px;align-items:end;
+  }
+  @media (max-width:860px){ .hero-grid{grid-template-columns:1fr;} }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--teal);margin-bottom:18px;display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--teal);}
+  .hero h1{
+    font-size:clamp(40px,6vw,68px);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    line-height:1.02;
+    margin-bottom:20px;
+  }
+  .hero h1 span{color:var(--teal);}
+  .hero p.lede{
+    font-size:18px;color:var(--ink-soft);max-width:56ch;margin-bottom:28px;
+  }
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:8px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 20px;border-radius:var(--radius);font-size:14px;font-weight:600;
+    transition:all .2s;
+  }
+  .btn-primary{background:var(--ink);color:#fff;}
+  .btn-primary:hover{background:var(--teal-deep);}
+  .btn-ghost{border:1px solid var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal);}
+
+  /* credentials ledger */
+  .ledger{
+    border:1px solid var(--line);background:var(--card);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .ledger-head{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--ink-soft);
+    padding:12px 20px;border-bottom:1px solid var(--line);background:var(--bg-alt);
+  }
+  .ledger-row{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding:14px 20px;border-bottom:1px solid var(--line);
+  }
+  .ledger-row:last-child{border-bottom:none;}
+  .ledger-label{font-size:13px;color:var(--ink-soft);}
+  .ledger-value{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;}
+  .ledger-value small{font-weight:500;font-size:12px;color:var(--ink-soft);font-family:'Inter',sans-serif;}
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section{padding:76px 0;border-bottom:1px solid var(--line);}
+  .section-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    margin-bottom:40px;gap:24px;flex-wrap:wrap;
+  }
+  .kicker{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.12em;
+    text-transform:uppercase;color:var(--teal);margin-bottom:10px;
+  }
+  .section-head h2{font-size:clamp(26px,3.4vw,36px);font-weight:700;letter-spacing:-0.01em;}
+  .section-note{font-size:14px;color:var(--ink-soft);max-width:38ch;text-align:right;}
+  @media (max-width:640px){.section-note{text-align:left;}}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;}
+  @media (max-width:860px){.about-grid{grid-template-columns:1fr;gap:32px;}}
+  .about-grid p{color:var(--ink-soft);margin-bottom:16px;font-size:16px;}
+  .facts{list-style:none;}
+  .facts li{
+    display:flex;gap:16px;padding:14px 0;border-top:1px solid var(--line);font-size:14px;
+  }
+  .facts li:last-child{border-bottom:1px solid var(--line);}
+  .facts .k{font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);min-width:120px;}
+  .facts .v{color:var(--ink);font-weight:500;}
+
+  /* ---------- SKILLS ---------- */
+  .skill-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  @media (max-width:760px){.skill-cols{grid-template-columns:1fr 1fr;}}
+  @media (max-width:480px){.skill-cols{grid-template-columns:1fr;}}
+  .skill-card{background:var(--bg);padding:24px;}
+  .skill-card h3{font-size:14px;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;color:var(--teal);}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;
+    padding:5px 10px;border:1px solid var(--line);border-radius:var(--radius);
+    color:var(--ink-soft);
+  }
+
+  /* ---------- EXPERIENCE ---------- */
+  .exp-item{
+    display:grid;grid-template-columns:200px 1fr;gap:32px;padding:28px 0;border-top:1px solid var(--line);
+  }
+  .exp-item:last-child{border-bottom:1px solid var(--line);}
+  @media (max-width:700px){.exp-item{grid-template-columns:1fr;gap:8px;}}
+  .exp-period{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);}
+  .exp-status{
+    display:inline-block;margin-top:8px;font-size:11px;font-family:'IBM Plex Mono',monospace;
+    color:var(--teal);border:1px solid var(--teal);padding:2px 8px;border-radius:20px;
+  }
+  .exp-role h3{font-size:19px;font-weight:600;margin-bottom:4px;}
+  .exp-org{color:var(--ink-soft);font-size:14px;margin-bottom:10px;}
+  .exp-role p{color:var(--ink-soft);font-size:15px;}
+
+  /* ---------- PROJECTS ---------- */
+  .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  @media (max-width:760px){.proj-grid{grid-template-columns:1fr;}}
+  .proj-card{background:var(--card);padding:28px;display:flex;flex-direction:column;gap:12px;transition:background .2s;}
+  .proj-card:hover{background:var(--bg-alt);}
+  .proj-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+  .proj-card h3{font-size:17px;font-weight:600;}
+  .proj-link{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);
+    border:1px solid var(--teal);padding:4px 9px;border-radius:var(--radius);white-space:nowrap;
+  }
+  .proj-link:hover{background:var(--teal);color:#fff;}
+  .proj-card p{color:var(--ink-soft);font-size:14.5px;flex:1;}
+  .proj-stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+  .proj-stack span{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    background:var(--bg-alt);padding:3px 8px;border-radius:20px;
+  }
+  .proj-updated{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-soft);
+    opacity:0.7;margin-top:2px;
+  }
+
+  /* ---------- RESEARCH ---------- */
+  .research-item{
+    border:1px solid var(--line);padding:26px 28px;margin-bottom:16px;border-radius:var(--radius);
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .research-top{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start;}
+  .research-item h3{font-size:16.5px;font-weight:600;max-width:64ch;line-height:1.35;}
+  .status-pill{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.04em;
+    padding:4px 10px;border-radius:20px;white-space:nowrap;
+  }
+  .status-progress{background:#fff3e0;color:#a15c00;border:1px solid #f0d9ae;}
+  .status-review{background:#eaf3f2;color:var(--teal-deep);border:1px solid #cfe4e1;}
+  .research-item p{color:var(--ink-soft);font-size:14.5px;}
+
+  /* ---------- ACHIEVEMENTS + CLUBS ---------- */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:56px;}
+  @media (max-width:860px){.two-col{grid-template-columns:1fr;gap:36px;}}
+  .list-plain{list-style:none;}
+  .list-plain li{
+    padding:12px 0;border-top:1px solid var(--line);font-size:14.5px;color:var(--ink-soft);
+    display:flex;gap:10px;
+  }
+  .list-plain li:last-child{border-bottom:1px solid var(--line);}
+  .list-plain li::before{content:"—";color:var(--teal);flex-shrink:0;}
+
+  /* ---------- CONTACT ---------- */
+  .contact{
+    background:var(--ink);color:#fff;border-bottom:none;
+  }
+  .contact .kicker{color:#8fd3c8;}
+  .contact h2{color:#fff;}
+  .contact-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center;}
+  @media (max-width:860px){.contact-grid{grid-template-columns:1fr;}}
+  .contact p{color:#c3cad6;font-size:16px;max-width:50ch;margin-bottom:24px;}
+  .contact-links{display:flex;flex-direction:column;gap:2px;}
+  .contact-links a{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:16px 0;border-top:1px solid rgba(255,255,255,0.14);
+    font-size:15px;font-weight:500;
+  }
+  .contact-links a:last-child{border-bottom:1px solid rgba(255,255,255,0.14);}
+  .contact-links a span.arrow{
+    font-family:'IBM Plex Mono',monospace;color:#8fd3c8;transition:transform .2s;
+  }
+  .contact-links a:hover span.arrow{transform:translateX(4px);}
+
+  footer{
+    background:var(--ink);color:#8996ab;text-align:center;font-size:13px;padding:20px 0 32px;
+  }
+
+  ::selection{background:var(--teal);color:#fff;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="brand">R. RISHITA<span class="dot">.</span></div>
+    <div class="navlinks">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#research">Research</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">AIML Engineer</div>
+      <h1>Building secure,<br>intelligent systems<br>from <span>data to deployment</span>.</h1>
+      <p class="lede">Computer Science undergraduate at VIT Chennai (AI &amp; ML) working across full-stack engineering, applied deep learning, and cybersecurity — currently building recruitment AI at Infosys SpringBoard and researching medical image classification.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">View projects</a>
+        <a class="btn btn-ghost" href="#contact">Contact me</a>
+      </div>
+    </div>
+    <div class="ledger">
+      <div class="ledger-head">Credentials — At a glance</div>
+      <div class="ledger-row"><span class="ledger-label">CGPA</span><span class="ledger-value">9.53 <small>/ 10, through Year 2</small></span></div>
+      <div class="ledger-row"><span class="ledger-label">Research papers</span><span class="ledger-value">2 <small>1 in review, 1 in progress</small></span></div>
+      <div class="ledger-row"><span class="ledger-label">Shipped projects</span><span class="ledger-value">9 <small>ML, security, full-stack</small></span></div>
+      <div class="ledger-row"><span class="ledger-label">Internships</span><span class="ledger-value">2 <small>Infosys, GP Strategies</small></span></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div>
+      <div class="kicker">About</div>
+      <h2 style="margin-bottom:18px;">A builder-first approach to AI.</h2>
+      <p>I'm an AI/ML-focused Computer Science undergraduate who prefers to learn a concept by shipping it — whether that's a deepfake detector, a fraud-detection pipeline, or a rootkit scanner. My work sits at the intersection of applied deep learning, secure system design, and practical engineering.</p>
+      <p>Alongside coursework, I'm currently building an AI recruitment copilot at Infosys SpringBoard, and researching automated medical image classification using both handcrafted and deep-feature ML/DL models.</p>
+    </div>
+    <ul class="facts">
+      <li><span class="k">Based in</span><span class="v">Chennai, India</span></li>
+      <li><span class="k">Studying</span><span class="v">B.Tech CSE — AI &amp; ML, VIT University Chennai (2024–2028)</span></li>
+      <li><span class="k">Focus areas</span><span class="v">Deep Learning, Full-Stack Dev, Cybersecurity</span></li>
+      <li><span class="k">Currently</span><span class="v">AIML Intern, Infosys SpringBoard</span></li>
+      <li><span class="k">Languages</span><span class="v">English, Hindi, Tamil, German</span></li>
+    </ul>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Experience</div>
+        <h2>Internships</h2>
+      </div>
+      <div class="section-note">Applied AI work with real teams, real users, and real constraints.</div>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-period">Jun 2026 — Aug 2026</div>
+        <div class="exp-status">Ongoing</div>
+      </div>
+      <div class="exp-role">
+        <h3>AI Recruitment &amp; Talent Management Copilot</h3>
+        <div class="exp-org">AIML Intern · Infosys SpringBoard</div>
+        <p>Conceptualised and developed an AI-powered copilot using Python and large language models to streamline candidate screening, recruitment workflows, and talent management processes.</p>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div>
+        <div class="exp-period">May 2026 — Jun 2026</div>
+      </div>
+      <div class="exp-role">
+        <h3>Intelligent CRM Chatbot</h3>
+        <div class="exp-org">AIML Intern · GP Strategies</div>
+        <p>Conceptualised and deployed an intelligent CRM chatbot using Python and large language models to automate client interactions and streamline lead management.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Selected Work</div>
+        <h2>Projects</h2>
+      </div>
+      <div class="section-note">Nine builds spanning deep learning, security tooling, and full-stack apps — most actively maintained on GitHub.</div>
+    </div>
+
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3>TruthLens-AI</h3>
+          <a class="proj-link" href="https://github.com/rishita2201/truthlens-ai" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <p>AI-powered deepfake forensic analysis platform with explainable AI, heatmaps, and multimedia authenticity detection — built on a ResNet18 classifier with Grad-CAM visualization.</p>
+        <div class="proj-stack"><span>TypeScript</span><span>ResNet18</span><span>Grad-CAM</span><span>MIT License</span></div>
+        <div class="proj-updated">Updated May 20</div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3>SmartSupplyGuardAI</h3>
+          <a class="proj-link" href="https://github.com/rishita2201/SmartSupplyGuardAI-AI-Driven-Multi-Tier-Supply-Chain-Fraud-Detection" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <p>AI-powered solution for detecting, preventing, and managing fraud across multi-tier supply chains — combines machine learning, blockchain, and real-time analytics.</p>
+        <div class="proj-stack"><span>Python</span><span>Blockchain</span><span>Real-Time Analytics</span><span>MIT License</span></div>
+        <div class="proj-updated">Updated Feb 25</div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3>AI Recruitment &amp; Talent Copilot</h3>
+          <a class="proj-link" href="https://github.com/rishita2201/ai-recruitment-talent-copilot" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <p>AI-powered recruitment and talent management platform for resume screening, candidate ranking, AI interviews, skill mapping, and workforce analytics. Built during my Infosys SpringBoard internship.</p>
+        <div class="proj-stack"><span>Python</span><span>LLMs</span><span>Resume Screening</span></div>
+        <div class="proj-updated">Updated last week</div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3>AI Research Assistant (RAG)</h3>
+          <a class="proj-link" href="https://github.com/rishita2201/ai-research-assistant-rag" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <p>Local RAG research assistant using LangChain, Ollama, FAISS, and Streamlit for source-grounded question answering over PDF, DOCX, and TXT documents.</p>
+        <div class="proj-stack"><span>LangChain</span><span>Ollama</span><span>FAISS</span><span>Streamlit</span></div>
+        <div class="proj-updated">Updated 15 hours ago</div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3>SecureMail — Email Threat Analyzer</h3>
+          <a class="proj-link" href="https://github.com/rishita2201/SecureMail-Email-Threat-Analyzer" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <p>A Python-based GUI application to analyze emails for spam, phishing URLs, suspicious domains, and attachment indicators using heuristic techniques.</p>
+        <div class="proj-stack"><span>Python</span><span>GUI</span><span>Heuristics</span><span>MIT License</span></div>
+        <div class="proj-updated">Updated Dec 2025</div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3>Rootkit Detection &amp; OS Integrity Analysis</h3>
+          <a class="proj-link" href="https://github.com/rishita2201/Rootkit-Detection-and-OS-Integrity-Analysis" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <p>Academic Operating Systems project on Linux rootkit behavior, persistence mechanisms, and OS integrity verification using rkhunter and audit tools.</p>
+        <div class="proj-stack"><span>Linux</span><span>rkhunter</span><span>Audit Tools</span><span>MIT License</span></div>
+        <div class="proj-updated">Updated Dec 2025</div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3>Student Attendance Management System</h3>
+          <a class="proj-link" href="https://github.com/rishita2201/Student-Attendance-Management-System" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <p>Python-based attendance system using Tkinter and MySQL with daily/monthly attendance, student registration, data visualization, and CSV export.</p>
+        <div class="proj-stack"><span>Python</span><span>Tkinter</span><span>MySQL</span><span>MIT License</span></div>
+        <div class="proj-updated">Updated Dec 2025</div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3>PathFinder-X</h3>
+          <a class="proj-link" href="https://github.com/rishita2201/PathFinder-X" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+        <p>ML-based career guidance system that analyzes user profiles and resumes to recommend career paths, industry domains, skill gaps, and learning resources.</p>
+        <div class="proj-stack"><span>Python</span><span>Predictive Matching</span></div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3>Baby Cry Monitoring System</h3>
+        </div>
+        <p>IoT-based monitoring system using ESP32 with temperature and humidity sensors to detect and analyze baby cry patterns for real-time safety monitoring.</p>
+        <div class="proj-stack"><span>ESP32</span><span>IoT</span><span>Sensors</span></div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-top">
+          <h3>This Portfolio</h3>
+        </div>
+        <p>A single-page portfolio site built from scratch — hand-coded HTML/CSS with a custom design system, responsive layout, and a structured content model pulling together projects, research, and experience.</p>
+        <div class="proj-stack"><span>HTML/CSS</span><span>Design Systems</span><span>Responsive UI</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="research">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Research</div>
+        <h2>Published &amp; ongoing work</h2>
+      </div>
+      <div class="section-note">Applying comparative ML/DL evaluation to medical imaging problems.</div>
+    </div>
+
+    <div class="research-item">
+      <div class="research-top">
+        <h3>A Comparative Study of Handcrafted and Deep Feature-Based Machine Learning and Deep Learning Models for Automated Classification of Gallbladder Diseases from Ultrasound Images</h3>
+        <span class="status-pill status-progress">Currently working</span>
+      </div>
+      <p>Evaluating handcrafted and deep feature-based ML/DL models — ResNet, MobileNet, EfficientNet, DenseNet, SVM, XGBoost, Random Forest, KNN, and LightGBM — for automated classification of gallbladder diseases from ultrasound images.</p>
+    </div>
+
+    <div class="research-item">
+      <div class="research-top">
+        <h3>Quantum-Inspired Multimodal Cardiovascular Disease Risk Stratification Framework</h3>
+        <span class="status-pill status-review">In review</span>
+      </div>
+      <p>A quantum-inspired multimodal framework using ML/DL models (Logistic Regression, Random Forest, SVM, ResNet, MobileNet) with comparative evaluation for optimal predictive performance.</p>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Toolkit</div>
+        <h2>Skills</h2>
+      </div>
+      <div class="section-note">Full-stack, ML/DL, and security fundamentals, applied together.</div>
+    </div>
+    <div class="skill-cols">
+      <div class="skill-card">
+        <h3>AI / Machine Learning</h3>
+        <div class="tags">
+          <span class="tag">PyTorch</span><span class="tag">Torchvision</span><span class="tag">ResNet18</span>
+          <span class="tag">MobileNet</span><span class="tag">EfficientNet</span><span class="tag">DenseNet</span>
+          <span class="tag">SVM</span><span class="tag">XGBoost</span><span class="tag">Random Forest</span>
+          <span class="tag">KNN</span><span class="tag">LightGBM</span><span class="tag">Grad-CAM</span>
+          <span class="tag">Prompt Engineering</span><span class="tag">LLM Integration</span>
+          <span class="tag">Scikit-Learn</span><span class="tag">Pandas</span><span class="tag">NumPy</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>Engineering</h3>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">Java</span><span class="tag">C</span><span class="tag">C++</span>
+          <span class="tag">JavaScript</span><span class="tag">React.js</span><span class="tag">Node.js</span>
+          <span class="tag">FastAPI</span><span class="tag">REST APIs</span><span class="tag">MySQL</span>
+          <span class="tag">Oracle SQL</span><span class="tag">MongoDB</span><span class="tag">AWS</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>Security &amp; Tools</h3>
+        <div class="tags">
+          <span class="tag">Spam/Phishing Detection</span><span class="tag">System Integrity Analysis</span>
+          <span class="tag">Linux Security</span><span class="tag">Git</span><span class="tag">GitHub</span>
+          <span class="tag">Linux</span><span class="tag">VS Code</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap two-col">
+    <div>
+      <div class="kicker">Recognition</div>
+      <h2 style="margin-bottom:18px;">Achievements</h2>
+      <ul class="list-plain">
+        <li>Branch sixth with a CGPA of 9.53 (through Year 2)</li>
+        <li>Recipient of multiple scholarships, cash awards, proficiency prizes, and a rolling trophy for academic excellence</li>
+        <li>Secured 97% in Class XII and 96.8% in Class X (CBSE Boards)</li>
+        <li>Winner — 1st Place, Codeathon organised by Team Neo</li>
+        <li>NPTEL Certification in Wildlife Ecology — scored 100.0</li>
+        <li>AWS Educate Machine Learning Foundations — Training Badge</li>
+        <li>Participated in multiple hackathons, including SIH and EDITN</li>
+        <li>Participated in Strategy Storm, HeatCode, and CodeForces</li>
+      </ul>
+    </div>
+    <div>
+      <div class="kicker">Leadership</div>
+      <h2 style="margin-bottom:18px;">Clubs &amp; Involvement</h2>
+      <ul class="list-plain">
+        <li>Lead Editor, School of Computer Science Newsletter — VIT Chennai</li>
+        <li>Core Board Member &amp; Senior Consultant, 180 Degrees Consulting — VIT Chennai</li>
+        <li>Frontend Developer, NEXUS — VIT Chennai</li>
+        <li>Programme Representative, CSE Cyber Security — VIT Chennai (2024–2025)</li>
+        <li>Cultural Secretary, PSBB Senior Secondary School (2023–2024)</li>
+        <li>Director, Interact Club (Rotary), PSBB Senior Secondary School (2023–24)</li>
+        <li>Team Lead, Reverberations — PSBB Senior Secondary School Culturals (2023–24)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <div class="kicker">Get in touch</div>
+      <h2 style="margin-bottom:16px;">Let's build something worth deploying.</h2>
+      <p>Open to AI/ML engineering roles, research collaborations, and internships. Reach out directly, or find me on any of the platforms below.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:rishitasrisrimal@gmail.com">Email <span class="arrow">rishitasrisrimal@gmail.com →</span></a>
+      <a href="tel:+916380783243">Phone <span class="arrow">+91 6380783243 →</span></a>
+      <a href="https://github.com/rishita2201" target="_blank" rel="noopener">GitHub <span class="arrow">github.com/rishita2201 →</span></a>
+      <a href="https://linkedin.com/in/rishita-r-257506335" target="_blank" rel="noopener">LinkedIn <span class="arrow">in/rishita-r-257506335 →</span></a>
+      <a href="https://leetcode.com/u/rishitar/" target="_blank" rel="noopener">LeetCode <span class="arrow">u/rishitar →</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 R. Rishita — Chennai, India
+</footer>
+
+</body>
+</html>
