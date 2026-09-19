@@ -3,279 +3,232 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>rishita@vit-chennai: ~</title>
-<meta name="description" content="R. Rishita — AI/ML Engineer. A working Linux-terminal portfolio.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<title>Command Prompt — R. Rishita</title>
+<meta name="description" content="R. Rishita — AI/ML Engineer. A working Windows command-prompt portfolio.">
 <style>
 :root{
   color-scheme: dark;
-  --bg:        #0b0e0c;
-  --bg-panel:  #0e1210;
-  --crt-green: #4fe08a;
-  --crt-green-dim: #2c8f5c;
-  --crt-amber: #ffb454;
-  --crt-cyan:  #6fd9d0;
-  --crt-red:   #ff6b6b;
-  --crt-white: #d9f2e4;
-  --muted:     #5c7568;
-  --border:    #1c2b21;
-  --border-hi: #2c4033;
-  --scanline: rgba(0,0,0,0.18);
+  --bg:      #0c0c0c;
+  --fg:      #cccccc;
+  --white:   #f2f2f2;
+  --green:   #16c60c;
+  --cyan:    #61d6d6;
+  --yellow:  #f9f1a5;
+  --red:     #e74856;
+  --blue:    #3b78ff;
+  --muted:   #767676;
+  --border:  #2b2b2b;
+  --border-hi:#4d4d4d;
+  --chrome:  #202020;
+  --chrome-2:#2d2d2d;
+  --accent:  #60cdff;
+  --ui: 'Segoe UI Variable Text','Segoe UI',system-ui,-apple-system,'Helvetica Neue',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
 body{
   background:var(--bg);
-  color:var(--crt-white);
-  font-family:'JetBrains Mono', monospace;
+  color:var(--fg);
+  font-family:'Cascadia Mono','Cascadia Code',Consolas,'Lucida Console','SF Mono',Menlo,'DejaVu Sans Mono',monospace;
   font-size:15px;
-  line-height:1.55;
+  line-height:1.4;
   overflow:hidden;
 }
+::selection{background:var(--fg);color:var(--bg);}
 
-/* ================= CRT / scanline overlay ================= */
-.crt-overlay{
-  position:fixed;inset:0;pointer-events:none;z-index:50;
-  background:
-    repeating-linear-gradient(180deg, var(--scanline) 0px, transparent 1px, transparent 3px);
-  mix-blend-mode:multiply;
-  opacity:.35;
-}
-.crt-vignette{
-  position:fixed;inset:0;pointer-events:none;z-index:49;
-  background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
-}
-.crt-flicker{
-  position:fixed;inset:0;pointer-events:none;z-index:48;
-  background:rgba(79,224,138,0.015);
-  animation:flicker 6s infinite;
-}
-@keyframes flicker{
-  0%,100%{opacity:0;} 92%{opacity:0;} 93%{opacity:1;} 94%{opacity:0;}
-}
-@media (prefers-reduced-motion: reduce){
-  .crt-flicker{animation:none;}
-}
-
-/* ================= boot screen ================= */
-#boot{
-  position:fixed;inset:0;background:#000;color:var(--crt-green);
-  z-index:100;padding:28px 32px;font-size:14px;white-space:pre-wrap;
-  overflow:hidden;
-}
-#boot .cursor-block{display:inline-block;width:8px;height:14px;background:var(--crt-green);vertical-align:middle;animation:blink 1s steps(1) infinite;}
-@keyframes blink{50%{opacity:0;}}
-#boot.hide{display:none;}
-
-/* ================= layout ================= */
-#app{height:100vh;display:flex;flex-direction:column;}
+/* ================= window chrome ================= */
+#app{height:100vh;height:100dvh;display:flex;flex-direction:column;}
 .titlebar{
-  height:34px;flex-shrink:0;
-  background:linear-gradient(180deg,#171d19,#11150f 90%);
-  border-bottom:1px solid var(--border-hi);
-  display:flex;align-items:center;padding:0 12px;gap:10px;
-  font-size:12.5px;color:var(--muted);
+  height:34px;flex-shrink:0;background:var(--chrome);
+  display:flex;align-items:stretch;justify-content:space-between;
+  font-family:var(--ui);font-size:12px;color:#e6e6e6;user-select:none;
 }
-.dots{display:flex;gap:7px;}
-.dot{width:11px;height:11px;border-radius:50%;}
-.dot.r{background:#ff5f56;}
-.dot.y{background:#ffbd2e;}
-.dot.g{background:#27c93f;}
-.titlebar .tb-title{flex:1;text-align:center;color:var(--muted);letter-spacing:.02em;}
-.titlebar .tb-status{display:flex;align-items:center;gap:6px;color:var(--crt-green-dim);}
-.tb-status .led{width:6px;height:6px;border-radius:50%;background:var(--crt-green);box-shadow:0 0 6px var(--crt-green);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+.tb-left{display:flex;align-items:center;gap:9px;padding-left:11px;min-width:0;}
+.tb-left svg{flex-shrink:0;}
+.tb-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tb-controls{display:flex;flex-shrink:0;}
+.tb-btn{width:46px;display:flex;align-items:center;justify-content:center;color:#e6e6e6;}
+.tb-btn:hover{background:#3a3a3a;}
+.tb-btn.close:hover{background:#c42b1c;color:#fff;}
 
 .tabbar{
-  min-height:32px;flex-shrink:0;display:flex;align-items:stretch;gap:0;
-  background:#0a0d0b;border-bottom:1px solid var(--border);
-  overflow-x:auto;
+  min-height:34px;flex-shrink:0;display:flex;align-items:stretch;
+  background:#181818;border-bottom:1px solid var(--border);
+  overflow-x:auto;font-family:var(--ui);
 }
 .tabbar::-webkit-scrollbar{height:0;}
 .tab{
-  padding:0 16px;display:flex;align-items:center;font-size:12.5px;color:var(--muted);
+  padding:0 15px;display:flex;align-items:center;font-size:12.5px;color:#a6a6a6;
   border-right:1px solid var(--border);cursor:pointer;white-space:nowrap;
-  transition:color .15s, background .15s;
+  border-top:2px solid transparent;
 }
-.tab:hover{color:var(--crt-white);}
-.tab.active{color:var(--crt-green);background:var(--bg-panel);border-bottom:2px solid var(--crt-green);}
-.tab .tag{color:var(--crt-amber);margin-right:6px;}
-#resumeTab{color:var(--crt-amber);}
-#resumeTab .tag{color:var(--crt-amber);}
-#resumeTab:hover{color:var(--bg);background:var(--crt-amber);}
+.tab:hover{color:#fff;background:#222;}
+.tab.active{color:#fff;background:var(--bg);border-top-color:var(--accent);}
+.tab .tag{color:var(--muted);margin-right:7px;font-family:'Cascadia Mono',Consolas,monospace;font-size:11.5px;}
+.tab.active .tag{color:var(--accent);}
+#resumeTab .tag{color:var(--yellow);}
 
 .termwrap{flex:1;min-height:0;position:relative;display:flex;min-width:0;}
 #terminal{
-  flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;padding:18px 22px 90px;background:var(--bg-panel);
+  flex:1;min-width:0;overflow-y:scroll;overflow-x:hidden;padding:8px 14px 60px;background:var(--bg);
   -webkit-overflow-scrolling:touch;
 }
-#terminal::-webkit-scrollbar{width:10px;}
-#terminal::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:6px;}
-#terminal::-webkit-scrollbar-track{background:transparent;}
+#terminal::-webkit-scrollbar{width:17px;}
+#terminal::-webkit-scrollbar-track{background:#171717;}
+#terminal::-webkit-scrollbar-thumb{background:#4d4d4d;}
+#terminal::-webkit-scrollbar-thumb:hover{background:#7a7a7a;}
+@supports not selector(::-webkit-scrollbar){ #terminal{scrollbar-color:#4d4d4d #171717;} }
 
-.line{white-space:pre-wrap;word-break:break-word;margin-bottom:2px;}
-.prompt-line{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
-.ps{color:var(--crt-green);font-weight:700;}
-.ps .path{color:var(--crt-cyan);}
-.ps .sym{color:var(--muted);}
-.cmd-echo{color:var(--crt-white);}
-
+/* ================= console text ================= */
+.line{white-space:pre-wrap;word-break:break-word;}
+.prompt-line{display:flex;flex-wrap:wrap;margin-top:8px;}
+.ps{color:var(--fg);white-space:nowrap;}
+.cmd-echo{color:var(--fg);}
 .out{margin:6px 0 4px 0;max-width:100%;overflow-wrap:break-word;word-break:break-word;}
 .dim{color:var(--muted);}
-.amber{color:var(--crt-amber);}
-.cyan{color:var(--crt-cyan);}
-.green{color:var(--crt-green);}
-.red{color:var(--crt-red);}
+.amber{color:var(--yellow);}
+.cyan{color:var(--cyan);}
+.green{color:var(--green);}
+.red{color:var(--red);}
 .bold{font-weight:700;}
-.link{color:var(--crt-cyan);text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
-.link:hover{color:var(--crt-white);}
-.desc-text{color:#8fae9c;}
+.bold:not(.green):not(.amber):not(.cyan):not(.red):not(.dim){color:var(--white);}
+.link{color:var(--cyan);text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+.link:hover{color:var(--white);}
+.desc-text{color:#b0b0b0;}
 
 table.ftable{border-collapse:collapse;margin:4px 0;max-width:100%;width:100%;table-layout:auto;}
-table.ftable td{padding:2px 14px 2px 0;vertical-align:top;overflow-wrap:break-word;word-break:break-word;}
+table.ftable td{padding:1px 14px 1px 0;vertical-align:top;overflow-wrap:break-word;word-break:break-word;}
 table.ftable tr.ftable-head td{
-  font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);
-  border-bottom:1px solid var(--border-hi);padding-bottom:6px;
+  font-size:12px;color:var(--muted);
+  border-bottom:1px solid var(--border-hi);padding-bottom:5px;
 }
 table.kv-table td:first-child{padding-right:6px;}
 table.kv-table td:nth-child(2){padding-right:10px;}
+table.dir-table td.num{text-align:right;padding-right:16px;}
+table.dir-table td{white-space:nowrap;}
 
 .neofetch-row{display:flex;gap:26px;flex-wrap:wrap;max-width:100%;}
 .neofetch-row table.ftable{flex:1;min-width:0;}
-
-.ascii{color:var(--crt-green);font-size:12px;line-height:1.15;}
-
-.bar-track{display:inline-block;width:200px;height:10px;background:#0a0d0b;border:1px solid var(--border-hi);vertical-align:middle;margin:0 8px;position:relative;top:-1px;overflow:hidden;}
-.bar-fill{display:block;height:100%;background:repeating-linear-gradient(90deg, var(--crt-green) 0px, var(--crt-green) 3px, #1c3a28 3px, #1c3a28 4px);box-shadow:0 0 6px rgba(79,224,138,0.5);}
+.ascii{color:var(--blue);font-size:12px;line-height:1.15;}
+.bar{white-space:nowrap;}
 
 .clickable-cmd{
-  display:inline-block;border:1px solid var(--border-hi);border-radius:4px;
-  padding:2px 9px;margin:3px 6px 3px 0;color:var(--crt-amber);cursor:pointer;
-  transition:background .15s, color .15s;
+  display:inline-block;border:1px solid var(--border-hi);
+  padding:0 8px;margin:3px 6px 3px 0;color:var(--yellow);cursor:pointer;
 }
-.clickable-cmd:hover{background:var(--crt-amber);color:#0b0e0c;}
+.clickable-cmd:hover{background:var(--fg);color:var(--bg);border-color:var(--fg);}
 
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin:8px 0 4px;max-width:100%;}
-.pcard{border:1px solid var(--border-hi);padding:10px 12px;border-radius:4px;background:#0a0f0b;min-width:0;overflow-wrap:break-word;word-break:break-word;}
-.pcard .ph{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:700;color:var(--crt-white);min-width:0;}
-.pcard .ph .link{flex-shrink:0;white-space:nowrap;}
-.pcard .ph .dim{flex-shrink:0;white-space:nowrap;}
+.pcard{border:1px solid var(--border-hi);padding:8px 12px;min-width:0;overflow-wrap:break-word;word-break:break-word;}
+.pcard:hover{border-color:var(--muted);}
+.pcard .ph{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:700;color:var(--white);min-width:0;}
+.pcard .ph .link{flex-shrink:0;white-space:nowrap;font-weight:400;}
+.pcard .ph .dim{flex-shrink:0;white-space:nowrap;font-weight:400;}
 .pcard .ph span:first-child{min-width:0;overflow-wrap:break-word;word-break:break-word;}
-.pcard .stack{color:var(--muted);font-size:12.5px;margin-top:4px;overflow-wrap:break-word;}
-.pcard .desc{color:#a9c2b0;font-size:13px;margin-top:6px;overflow-wrap:break-word;}
+.pcard .stack{color:var(--cyan);font-size:12.5px;margin-top:4px;overflow-wrap:break-word;}
+.pcard .desc{color:#b0b0b0;font-size:13px;margin-top:6px;overflow-wrap:break-word;}
 
-form#cmdform{display:flex;align-items:center;gap:8px;margin-top:6px;}
+form#cmdform{display:flex;align-items:center;margin-top:8px;}
 #cmdinput{
-  flex:1;background:transparent;border:none;outline:none;color:var(--crt-white);
-  font-family:'JetBrains Mono',monospace;font-size:15px;caret-color:var(--crt-green);
+  flex:1;min-width:0;background:transparent;border:none;outline:none;color:var(--fg);
+  font-family:inherit;font-size:15px;caret-color:var(--fg);caret-shape:underscore;
 }
-.fake-caret{display:inline-block;width:8px;height:16px;background:var(--crt-green);vertical-align:text-bottom;animation:blink 1s steps(1) infinite;}
 
-.statusbar{
-  height:24px;flex-shrink:0;background:#0a0d0b;border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;padding:0 14px;
-  font-size:11.5px;color:var(--muted);
+/* ================= taskbar ================= */
+.taskbar{
+  height:40px;flex-shrink:0;background:#1c1c1c;border-top:1px solid #2f2f2f;
+  display:flex;align-items:center;padding:0 12px;
+  font-family:var(--ui);font-size:11.5px;color:#d6d6d6;user-select:none;
 }
-.statusbar span.k{color:var(--crt-green-dim);}
+.tk-side{flex:1;display:flex;}
+.tk-side.right{justify-content:flex-end;}
+.tk-center{display:flex;align-items:center;gap:4px;}
+.tk-btn{width:38px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:5px;}
+.tk-btn:hover{background:#2c2c2c;}
+.tk-btn.open{background:#2b2b2b;position:relative;}
+.tk-btn.open::after{content:"";position:absolute;bottom:2px;left:50%;width:14px;height:3px;margin-left:-7px;border-radius:2px;background:var(--accent);}
+.tray{text-align:right;line-height:1.25;padding:2px 6px;border-radius:5px;}
+.tray:hover{background:#2c2c2c;}
 
+/* ================= small screens ================= */
 @media (max-width:640px){
   body{font-size:13.5px;overflow-x:hidden;}
-  #terminal{padding:14px 12px 90px;}
-  .titlebar .tb-title{display:none;}
+  #terminal{padding:8px 10px 60px;}
+  #terminal::-webkit-scrollbar{width:10px;}
+  .tb-btn{width:38px;}
   .card-grid{grid-template-columns:1fr;}
   .neofetch-row{flex-direction:column;gap:14px;}
-  .bar-track{width:120px;}
   #cmdinput{font-size:16px;}
+  .tk-side:first-child{display:none;}
+  .tk-center{margin-right:auto;}
 
-  /* No more sideways-swipe tab strip: wrap tabs onto as many rows as
-     needed so every command is reachable by tapping, not scrolling. */
-  .tabbar{
-    overflow-x:visible;flex-wrap:wrap;height:auto;
-    border-bottom:1px solid var(--border-hi);
-  }
-  .tab{
-    flex:0 0 auto;padding:7px 10px;font-size:11px;
-    border-bottom:1px solid var(--border);
-  }
+  .tabbar{overflow-x:visible;flex-wrap:wrap;height:auto;border-bottom:1px solid var(--border-hi);}
+  .tab{flex:0 0 auto;padding:7px 10px;font-size:11px;border-bottom:1px solid var(--border);}
   .tab .tag{margin-right:4px;}
 
-  /* Rigid multi-column tables don't fit narrow screens: table auto-layout
-     squeezes each column so thin that text wraps one word per line.
-     Turn every row into a wrapping flex line instead, so cells keep their
-     natural (min-content) width and only wrap where the text actually
-     needs to. */
+  /* rigid tables squeeze columns to one word per line on narrow screens;
+     turn each row into a wrapping flex line instead */
   table.ftable, table.ftable tbody{display:block;width:100%;}
-  table.ftable tr{
-    display:flex;flex-wrap:wrap;align-items:baseline;
-    column-gap:8px;row-gap:2px;
-    width:100%;padding:4px 0;
-  }
-  table.ftable td{
-    display:block;padding:0;white-space:normal;
-    overflow-wrap:break-word;word-break:normal;
-    flex:0 1 auto;min-width:0;
-  }
-  /* labels / short fixed tokens should never break mid-word */
+  table.ftable tr{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:8px;row-gap:2px;width:100%;padding:3px 0;}
+  table.ftable td{display:block;padding:0;white-space:normal;overflow-wrap:break-word;word-break:normal;flex:0 1 auto;min-width:0;}
+  table.dir-table td{white-space:normal;}
+  table.dir-table td.num{text-align:left;padding-right:0;}
   table.kv-table td:first-child,
   table.ftable tr.ftable-head td,
   table.ftable td.cyan:first-child,
   table.ftable td.dim:first-child,
   table.ftable td.amber:first-child{white-space:nowrap;}
-
   table.ftable tr:not(.ftable-head){border-bottom:1px solid var(--border);}
   table.ftable tr:last-child{border-bottom:none;}
   table.ftable tr.ftable-head{border-bottom:1px solid var(--border-hi);margin-bottom:2px;}
-
   .pcard .ph{flex-wrap:wrap;}
-}
-@media (max-width:400px){
-  .bar-track{width:90px;}
 }
 </style>
 </head>
 <body>
 
-<div id="boot"><span id="bootText"></span><span class="cursor-block"></span></div>
-
-<div id="app" style="display:none;">
-  <div class="titlebar">
-    <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-    <div class="tb-title">rishita@vit-chennai — bash — 100×34</div>
-    <div class="tb-status"><span class="led"></span>online</div>
+<div id="app">
+  <div class="titlebar" aria-hidden="true">
+    <div class="tb-left">
+      <svg width="16" height="16" viewBox="0 0 16 16"><rect x="0.5" y="2" width="15" height="12" rx="1.5" fill="#0c0c0c" stroke="#8a8a8a"/><path d="M3.5 6l2.5 2-2.5 2" stroke="#ccc" stroke-width="1.2" fill="none"/><path d="M7.5 10.5h3" stroke="#ccc" stroke-width="1.2"/></svg>
+      <span class="tb-title">Command Prompt</span>
+    </div>
+    <div class="tb-controls">
+      <div class="tb-btn"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 5.5h10" stroke="currentColor"/></svg></div>
+      <div class="tb-btn"><svg width="10" height="10" viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9" fill="none" stroke="currentColor"/></svg></div>
+      <div class="tb-btn close"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 0l10 10M10 0L0 10" stroke="currentColor"/></svg></div>
+    </div>
   </div>
 
   <div class="tabbar" id="tabbar">
-    <div class="tab active" data-cmd="home"><span class="tag">~</span>home</div>
-    <div class="tab" data-cmd="whoami"><span class="tag">$</span>whoami</div>
-    <div class="tab" data-cmd="ls projects/"><span class="tag">$</span>projects/</div>
-    <div class="tab" data-cmd="cat experience.log"><span class="tag">$</span>experience.log</div>
-    <div class="tab" data-cmd="cat research.md"><span class="tag">$</span>research.md</div>
-    <div class="tab" data-cmd="cat skills.yaml"><span class="tag">$</span>skills.yaml</div>
-    <div class="tab" data-cmd="ls certifications/"><span class="tag">$</span>certs/</div>
-    <div class="tab" data-cmd="cat contact.sh"><span class="tag">$</span>contact.sh</div>
+    <div class="tab active" data-cmd="home"><span class="tag">C:\</span>home</div>
+    <div class="tab" data-cmd="whoami"><span class="tag">&gt;</span>whoami</div>
+    <div class="tab" data-cmd="dir projects"><span class="tag">&gt;</span>projects\</div>
+    <div class="tab" data-cmd="type experience.log"><span class="tag">&gt;</span>experience.log</div>
+    <div class="tab" data-cmd="type research.md"><span class="tag">&gt;</span>research.md</div>
+    <div class="tab" data-cmd="type skills.yaml"><span class="tag">&gt;</span>skills.yaml</div>
+    <div class="tab" data-cmd="dir certifications"><span class="tag">&gt;</span>certs\</div>
+    <div class="tab" data-cmd="type contact.bat"><span class="tag">&gt;</span>contact.bat</div>
     <div class="tab" id="resumeTab"><span class="tag">↓</span>resume.pdf</div>
   </div>
 
   <div class="termwrap">
-    <div id="terminal"></div>
+    <div id="terminal"><div class="line" id="bootText"></div></div>
   </div>
 
-  <div class="statusbar">
-    <span><span class="k">INSERT</span> · bash 5.2.15</span>
-    <span id="clock" class="dim"></span>
+  <div class="taskbar" aria-hidden="true">
+    <div class="tk-side"></div>
+    <div class="tk-center">
+      <div class="tk-btn"><svg width="18" height="18" viewBox="0 0 18 18"><rect x="1" y="1" width="7.5" height="7.5" fill="#4cc2ff"/><rect x="9.5" y="1" width="7.5" height="7.5" fill="#4cc2ff"/><rect x="1" y="9.5" width="7.5" height="7.5" fill="#4cc2ff"/><rect x="9.5" y="9.5" width="7.5" height="7.5" fill="#4cc2ff"/></svg></div>
+      <div class="tk-btn open"><svg width="20" height="20" viewBox="0 0 16 16"><rect x="0.5" y="2" width="15" height="12" rx="1.5" fill="#0c0c0c" stroke="#8a8a8a"/><path d="M3.5 6l2.5 2-2.5 2" stroke="#ccc" stroke-width="1.2" fill="none"/><path d="M7.5 10.5h3" stroke="#ccc" stroke-width="1.2"/></svg></div>
+    </div>
+    <div class="tk-side right">
+      <div class="tray"><div id="clock"></div><div id="date"></div></div>
+    </div>
   </div>
 </div>
 
-<div class="crt-flicker"></div>
-<div class="crt-overlay"></div>
-<div class="crt-vignette"></div>
-
 <script>
-/* ============================================================
-   DATA
-   ============================================================ */
 const D = {
   name: "R. Rishita",
   role: "AI/ML Engineer — Full-Stack · Applied Deep Learning · Cybersecurity",
@@ -423,58 +376,77 @@ const D = {
   ]
 };
 
+
 /* ============================================================
    BOOT SEQUENCE
    ============================================================ */
+const PROMPT = "C:\\Users\\Rishita>";
+const VER = "Microsoft Windows [Version 10.0.26100.4652]";
+
 const bootLines = [
-  "GRUB-VIT  v9.53.02",
+  VER,
+  "(c) Microsoft Corporation. All rights reserved.",
   "",
-  "Booting: rishita-os (kernel 6.28.0-aiml) ...",
+  PROMPT + "portfolio.exe --start",
   "",
-  "[  OK  ] Mounted /home/rishita",
-  "[  OK  ] Started coursework.service (B.Tech CSE — AI & ML, VIT Chennai)",
-  "[  OK  ] Started internship.service (Infosys SpringBoard)",
-  "[  OK  ] Loaded module: deep_learning.ko",
-  "[  OK  ] Loaded module: cybersecurity.ko",
-  "[  OK  ] Loaded module: full_stack.ko",
-  "[  OK  ] Reached target research.target (2 papers)",
+  "Initializing R. Rishita portfolio v9.53 ...",
+  "",
+  "[  OK  ] Mounted C:\\Users\\Rishita",
+  "[  OK  ] Started coursework.svc (B.Tech CSE — AI & ML, VIT Chennai)",
+  "[  OK  ] Started internship.svc (Infosys SpringBoard)",
+  "[  OK  ] Loaded module: deep_learning.dll",
+  "[  OK  ] Loaded module: cybersecurity.dll",
+  "[  OK  ] Loaded module: full_stack.dll",
+  "[  OK  ] Reached target: research (2 papers)",
   "[  OK  ] Network is online — status: OPEN TO OPPORTUNITIES",
-  "",
-  "rishita-os 26.09 LTS"
+  ""
 ];
 
-function typeBoot(cb){
+let skipBoot = false, booted = false;
+function finishBoot(){ if(booted) return; booted = true; initTerminal(); }
+
+function typeBoot(){
   const el = document.getElementById("bootText");
   let li = 0;
   function nextLine(){
-    if(li >= bootLines.length){ cb(); return; }
+    if(skipBoot){ el.textContent = bootLines.join("\n") + "\n"; finishBoot(); return; }
+    if(li >= bootLines.length){ finishBoot(); return; }
     const line = bootLines[li];
-    let ci = 0;
-    const speed = line.startsWith("[") ? 4 : 10;
-    function typeChar(){
-      el.textContent += line[ci] || "";
-      ci++;
-      if(ci <= line.length){
-        setTimeout(typeChar, speed + Math.random()*8);
-      } else {
-        el.textContent += "\n";
-        li++;
-        setTimeout(nextLine, line === "" ? 30 : 55);
-      }
+    const isCmd = line.startsWith(PROMPT);
+    if(li < 3 || line === ""){
+      el.textContent += line + "\n"; li++;
+      setTimeout(nextLine, li <= 3 ? 90 : 25);
+      return;
     }
-    typeChar();
+    let ci = 0;
+    const speed = isCmd ? 55 : 5;
+    (function typeChar(){
+      if(skipBoot){ el.textContent += line.slice(ci) + "\n"; li++; nextLine(); return; }
+      if(ci < line.length){
+        el.textContent += line[ci++];
+        setTimeout(typeChar, speed + Math.random() * speed * 0.6);
+      } else {
+        el.textContent += "\n"; li++;
+        setTimeout(nextLine, isCmd ? 380 : 45);
+      }
+    })();
   }
   nextLine();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  typeBoot(() => {
-    setTimeout(() => {
-      document.getElementById("boot").classList.add("hide");
-      document.getElementById("app").style.display = "flex";
-      initTerminal();
-    }, 350);
-  });
+  const skip = () => { skipBoot = true; };
+  document.addEventListener("keydown", skip);
+  document.addEventListener("pointerdown", skip);
+  typeBoot();
+  // stop listening once the shell is ready
+  const poll = setInterval(() => {
+    if(booted){
+      document.removeEventListener("keydown", skip);
+      document.removeEventListener("pointerdown", skip);
+      clearInterval(poll);
+    }
+  }, 200);
 });
 
 /* ============================================================
@@ -495,18 +467,17 @@ function appendHTML(html){
 
 function promptEcho(cmdText){
   appendHTML(`<div class="prompt-line">
-    <span class="ps">rishita@vit-chennai<span class="sym">:</span><span class="path">~</span><span class="sym">$</span></span>
-    <span class="cmd-echo">${esc(cmdText)}</span>
+    <span class="ps">${esc(PROMPT)}</span><span class="cmd-echo">${esc(cmdText)}</span>
   </div>`);
 }
 
 function barHTML(pct){
-  return `<span class="bar-track"><span class="bar-fill" style="width:${pct}%"></span></span>${pct}%`;
+  const total = 16, f = Math.round(total * pct / 100);
+  return `<span class="bar"><span class="green">${"█".repeat(f)}</span><span class="dim">${"░".repeat(total - f)}</span></span> ${pct}%`;
 }
 
 function projectCard(p){
-  const cats = p.cat.split(",").join(" · ");
-  const linkHTML = p.url ? `<span class="link" data-open="${p.url}">↗&nbsp;open</span>` : `<span class="dim">local</span>`;
+  const linkHTML = p.url ? `<span class="link" data-open="${p.url}">open&nbsp;↗</span>` : `<span class="dim">local</span>`;
   return `<div class="pcard">
     <div class="ph"><span>${esc(p.name)}</span>${linkHTML}</div>
     <div class="stack">${esc(p.stack)}</div>
@@ -516,26 +487,28 @@ function projectCard(p){
 }
 
 const HELP_HTML = `<div class="out">
-Available commands:
+For more information on a specific command, click it or type it.
 <table class="ftable">
-<tr><td class="amber">help</td><td class="dim">— show this list</td></tr>
-<tr><td class="amber">neofetch</td><td class="dim">— system / candidate summary</td></tr>
-<tr><td class="amber">whoami</td><td class="dim">— about me</td></tr>
-<tr><td class="amber">ls</td><td class="dim">— list top-level directories</td></tr>
-<tr><td class="amber">ls projects/</td><td class="dim">— list &amp; filter all 15 projects</td></tr>
-<tr><td class="amber">cat experience.log</td><td class="dim">— internship history</td></tr>
-<tr><td class="amber">cat research.md</td><td class="dim">— published &amp; ongoing research</td></tr>
-<tr><td class="amber">cat skills.yaml</td><td class="dim">— full skill inventory</td></tr>
-<tr><td class="amber">ls certifications/</td><td class="dim">— 31 certs, awards &amp; honours</td></tr>
-<tr><td class="amber">cat achievements.txt</td><td class="dim">— highlight reel</td></tr>
-<tr><td class="amber">cat leadership.txt</td><td class="dim">— clubs &amp; involvement</td></tr>
-<tr><td class="amber">cat contact.sh</td><td class="dim">— get in touch</td></tr>
-<tr><td class="amber">sudo hire rishita</td><td class="dim">— run this one 😉</td></tr>
-<tr><td class="amber">clear</td><td class="dim">— clear the screen</td></tr>
+<tr><td class="amber">help</td><td class="dim">show this list</td></tr>
+<tr><td class="amber">systeminfo</td><td class="dim">system / candidate summary</td></tr>
+<tr><td class="amber">whoami</td><td class="dim">about me</td></tr>
+<tr><td class="amber">dir</td><td class="dim">list top-level files and folders</td></tr>
+<tr><td class="amber">dir projects</td><td class="dim">list &amp; filter all 15 projects</td></tr>
+<tr><td class="amber">type experience.log</td><td class="dim">internship history</td></tr>
+<tr><td class="amber">type research.md</td><td class="dim">published &amp; ongoing research</td></tr>
+<tr><td class="amber">type skills.yaml</td><td class="dim">full skill inventory</td></tr>
+<tr><td class="amber">dir certifications</td><td class="dim">31 certs, awards &amp; honours</td></tr>
+<tr><td class="amber">type achievements.txt</td><td class="dim">highlight reel</td></tr>
+<tr><td class="amber">type leadership.txt</td><td class="dim">clubs &amp; involvement</td></tr>
+<tr><td class="amber">type contact.bat</td><td class="dim">get in touch</td></tr>
+<tr><td class="amber">start resume.pdf</td><td class="dim">open my résumé</td></tr>
+<tr><td class="amber">hire rishita</td><td class="dim">run this one 😉</td></tr>
+<tr><td class="amber">cls</td><td class="dim">clear the screen</td></tr>
 </table>
+<span class="dim">Linux habits work too: ls, cat and clear are accepted.</span>
 </div>`;
 
-function renderNeofetch(){
+function renderSysinfo(){
   const ascii = `
      ██████╗
     ██╔══██╗
@@ -546,17 +519,17 @@ function renderNeofetch(){
   return `<div class="out neofetch-row">
     <pre class="ascii">${ascii}</pre>
     <table class="ftable">
-      <tr><td class="green bold">rishita</td><td>@</td><td class="green bold">vit-chennai</td></tr>
-      <tr><td colspan="3"><span class="dim">-----------------------</span></td></tr>
-      <tr><td class="cyan">OS</td><td>:</td><td>rishita-os 26.09 LTS (AI &amp; ML build)</td></tr>
+      <tr><td class="cyan">Host Name</td><td>:</td><td>VIT-CHENNAI</td></tr>
+      <tr><td class="cyan">User Name</td><td>:</td><td class="bold">${esc(D.name)}</td></tr>
+      <tr><td class="cyan">OS Name</td><td>:</td><td>Microsoft Windows 11 — Rishita Edition (AI &amp; ML build)</td></tr>
       <tr><td class="cyan">Role</td><td>:</td><td>${esc(D.role)}</td></tr>
-      <tr><td class="cyan">Uptime</td><td>:</td><td>2 yrs into B.Tech CSE (AI &amp; ML)</td></tr>
-      <tr><td class="cyan">Host</td><td>:</td><td>${esc(D.study)}</td></tr>
+      <tr><td class="cyan">System Up Time</td><td>:</td><td>2 yrs into B.Tech CSE (AI &amp; ML)</td></tr>
+      <tr><td class="cyan">Institution</td><td>:</td><td>${esc(D.study)}</td></tr>
       <tr><td class="cyan">CGPA</td><td>:</td><td>${barHTML(95)} <span class="dim">(${esc(D.cgpa)})</span></td></tr>
-      <tr><td class="cyan">Shell</td><td>:</td><td>Python / FastAPI / React</td></tr>
-      <tr><td class="cyan">Packages</td><td>:</td><td>15 shipped projects, 31 certs, 2 papers</td></tr>
-      <tr><td class="cyan">Current</td><td>:</td><td>${esc(D.current)}</td></tr>
-      <tr><td class="cyan">Locale</td><td>:</td><td>${esc(D.location)}</td></tr>
+      <tr><td class="cyan">Runtime Stack</td><td>:</td><td>Python / FastAPI / React</td></tr>
+      <tr><td class="cyan">Installed</td><td>:</td><td>15 shipped projects, 31 certs, 2 papers</td></tr>
+      <tr><td class="cyan">Current Task</td><td>:</td><td>${esc(D.current)}</td></tr>
+      <tr><td class="cyan">System Locale</td><td>:</td><td>${esc(D.location)}</td></tr>
       <tr><td class="cyan">Status</td><td>:</td><td class="green bold">available for AI/ML internships &amp; roles</td></tr>
     </table>
   </div>`;
@@ -564,16 +537,12 @@ function renderNeofetch(){
 
 function renderWhoami(){
   return `<div class="out">
-<span class="green bold">${esc(D.name)}</span>  <span class="dim">/ ${esc(D.role)}</span>
+<span class="dim">vit-chennai\\rishita</span><br>
+<span class="green bold">${esc(D.name)}</span> <span class="dim">/ ${esc(D.role)}</span>
 <br><br>
-I'm an AI/ML-focused, pre-final year Computer Science student who prefers to learn
-a concept by shipping it — whether that's a computer vision system, a
-fraud-detection pipeline, or a rootkit scanner. My work sits at the
-intersection of applied deep learning, secure system design, and
-practical engineering.
-
-Alongside coursework, I'm currently building an AI recruitment copilot
-at Infosys SpringBoard.
+I'm an AI/ML-focused, pre-final year Computer Science student who prefers to learn a concept by shipping it — whether that's a computer vision system, a fraud-detection pipeline, or a rootkit scanner. My work sits at the intersection of applied deep learning, secure system design, and practical engineering.
+<br><br>
+Alongside coursework, I'm currently building an AI recruitment copilot at Infosys SpringBoard.
 
 <table class="ftable" style="margin-top:10px;">
 <tr><td class="cyan">based_in</td><td>${esc(D.location)}</td></tr>
@@ -583,24 +552,43 @@ at Infosys SpringBoard.
 <tr><td class="cyan">languages</td><td>${esc(D.langs)}</td></tr>
 </table>
 
-<span class="dim">try:</span> <span class="clickable-cmd" data-cmd="cat experience.log">cat experience.log</span><span class="clickable-cmd" data-cmd="ls projects/">ls projects/</span>
+<span class="dim">try:</span> <span class="clickable-cmd" data-cmd="type experience.log">type experience.log</span><span class="clickable-cmd" data-cmd="dir projects">dir projects</span>
 </div>`;
 }
 
-function renderLS(){
+function pad2(n){ return String(n).padStart(2,"0"); }
+function fmtDate(d){ return `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()}`; }
+function fmtTime(d){
+  const h = d.getHours() % 12 || 12;
+  return `${pad2(h)}:${pad2(d.getMinutes())} ${d.getHours() < 12 ? "AM" : "PM"}`;
+}
+
+function renderDir(){
+  const now = new Date(), stamp = `${fmtDate(now)}  ${fmtTime(now)}`;
+  const dirs = [["projects","15 items"],["certifications","31 items"]];
+  const files = [
+    ["experience.log","2 entries",2048,"amber"],
+    ["research.md","2 papers",6144,"amber"],
+    ["skills.yaml","9 categories",3072,"amber"],
+    ["achievements.txt","9 lines",1024,"amber"],
+    ["leadership.txt","8 lines",1024,"amber"],
+    ["contact.bat","executable",512,"green"]
+  ];
+  const total = files.reduce((a,f) => a + f[2], 0);
+  const dirRow = (name, info, cls) =>
+    `<tr><td class="dim">${stamp}</td><td class="num">&lt;DIR&gt;</td><td class="${cls||"cyan"}">${name}</td><td class="dim">${info||""}</td></tr>`;
   return `<div class="out">
-<span class="green">total 8</span>
-<table class="ftable">
-<tr class="ftable-head"><td class="dim">PERMS</td><td class="dim">NAME</td><td class="dim">INFO</td></tr>
-<tr><td class="cyan bold">drwxr-xr-x</td><td class="cyan">projects/</td><td class="dim">15 items</td></tr>
-<tr><td class="cyan bold">drwxr-xr-x</td><td class="cyan">certifications/</td><td class="dim">31 items</td></tr>
-<tr><td>-rw-r--r--</td><td class="amber">experience.log</td><td class="dim">2 entries</td></tr>
-<tr><td>-rw-r--r--</td><td class="amber">research.md</td><td class="dim">2 papers</td></tr>
-<tr><td>-rw-r--r--</td><td class="amber">skills.yaml</td><td class="dim">9 categories</td></tr>
-<tr><td>-rw-r--r--</td><td class="amber">achievements.txt</td><td class="dim">8 lines</td></tr>
-<tr><td>-rw-r--r--</td><td class="amber">leadership.txt</td><td class="dim">7 lines</td></tr>
-<tr><td>-rwxr-xr-x</td><td class="green">contact.sh</td><td class="dim">executable</td></tr>
+ Volume in drive C is PORTFOLIO<br>
+ Volume Serial Number is 2201-9530<br><br>
+ Directory of C:\\Users\\Rishita
+<table class="ftable dir-table" style="margin-top:8px;">
+${dirRow(".","","dim")}
+${dirRow("..","","dim")}
+${dirs.map(d => dirRow(d[0], d[1])).join("")}
+${files.map(f => `<tr><td class="dim">${stamp}</td><td class="num">${f[2].toLocaleString("en-US")}</td><td class="${f[3]}">${f[0]}</td><td class="dim">${f[1]}</td></tr>`).join("")}
 </table>
+<span class="dim">       ${files.length} File(s)   ${total.toLocaleString("en-US")} bytes</span><br>
+<span class="dim">       ${dirs.length + 2} Dir(s)   ∞ bytes free</span>
 </div>`;
 }
 
@@ -608,11 +596,11 @@ function renderProjects(filter){
   filter = filter || "all";
   const cats = ["all","ai","security","data","iot","web"];
   const filterBar = cats.map(c =>
-    `<span class="clickable-cmd" data-cmd="ls projects/ ${c}" style="${c===filter ? 'background:var(--crt-amber);color:#0b0e0c;' : ''}">${c}</span>`
+    `<span class="clickable-cmd" data-cmd="dir projects ${c}" style="${c===filter ? 'background:var(--fg);color:#0c0c0c;' : ''}">${c}</span>`
   ).join("");
   const list = D.projects.filter(p => filter === "all" || p.cat.split(",").includes(filter));
   return `<div class="out">
-<span class="dim">// projects/ — filter:</span> ${filterBar}
+<span class="dim">REM projects\\ — filter:</span> ${filterBar}
 <div class="card-grid">${list.map(projectCard).join("")}</div>
 <span class="dim">showing ${list.length} of ${D.projects.length}</span>
 </div>`;
@@ -622,7 +610,7 @@ function renderExperience(){
   return `<div class="out">
 ${D.experience.map((e,i) => `
 <span class="amber bold">0${i+1}</span> <span class="dim">[${esc(e.period)}]</span> <span class="${e.status==='ONGOING'?'green':'dim'} bold">${e.status}</span><br>
-<span class="bold" style="font-size:16px;color:var(--crt-white);">${esc(e.title)}</span><br>
+<span class="bold" style="font-size:16px;">${esc(e.title)}</span><br>
 <span class="amber">${esc(e.org)}</span><br>
 <span class="desc-text">${esc(e.desc)}</span>
 `).join("<br><br>")}
@@ -633,7 +621,7 @@ function renderResearch(){
   return `<div class="out">
 ${D.research.map(r => `
 <span class="${r.status==='IN REVIEW'?'cyan':'amber'} bold">[${esc(r.status)}]</span><br>
-<span class="bold" style="font-size:16px;color:var(--crt-white);">${esc(r.title)}</span><br>
+<span class="bold" style="font-size:16px;">${esc(r.title)}</span><br>
 <span class="desc-text">${esc(r.desc)}</span>
 `).join("<br><br>")}
 </div>`;
@@ -659,8 +647,8 @@ function renderCerts(){
     `<tr><td class="dim">${String(i+1).padStart(2,"0")}</td><td>${certBadge(c.type)}</td><td>${esc(c.name)}</td><td class="dim">${esc(c.issuer)}</td><td class="dim">${esc(c.date)}</td></tr>`
   ).join("");
   return `<div class="out">
-<span class="dim">// certifications/ — Infosys Springboard, NPTEL, VIT Chennai, school</span><br>
-<span class="green">total ${D.certs.length}</span>
+<span class="dim">REM certifications\\ — Infosys Springboard, NPTEL, VIT Chennai, school</span><br>
+<span class="green">${D.certs.length} File(s)</span>
 <table class="ftable" style="margin-top:6px;">
 ${header}
 ${rows}
@@ -690,93 +678,131 @@ function renderContact(){
     ["resume", `<span class="link" data-open="${D.resume}">download résumé.pdf ↓</span>`]
   ];
   return `<div class="out">
-<span class="dim">#!/bin/bash</span><br>
-<span class="dim"># contact.sh — running...</span><br><br>
+<span class="dim">@echo off</span><br>
+<span class="dim">REM contact.bat — running...</span><br><br>
 <table class="ftable kv-table">
 ${rows.map(([k,v]) => `<tr><td class="bold">${k}</td><td class="dim">=</td><td>${v}</td></tr>`).join("")}
 </table>
 <br>
-<span class="green">[  OK  ]</span> script exited 0 — open to AI/ML roles, research collabs &amp; internships.
+<span class="green">The command completed successfully.</span> Open to AI/ML roles, research collabs &amp; internships.
 </div>`;
 }
 
 function renderHire(){
   return `<div class="out">
-<span class="amber">[sudo]</span> password for recruiter: <span class="dim">********</span>
-
-Analyzing candidate...
+Enter the password for recruiter: <span class="dim">********</span><br>
+Attempting to start hire.exe as user "VIT-CHENNAI\\recruiter" ...
+<br><br>
+Analyzing candidate...<br>
 ${barHTML(100)}
-
-<span class="green bold">RESULT: highly recommended.</span>
-15 shipped projects · 2 research papers · 9.53 CGPA · full-stack + deep
-learning + cybersecurity range. Currently building recruitment AI at
-Infosys SpringBoard — she'd probably automate your onboarding, too.
-
-<span class="dim">next step:</span> <span class="clickable-cmd" data-cmd="cat contact.sh">cat contact.sh</span>
+<br><br>
+<span class="green bold">RESULT: highly recommended.</span><br>
+15 shipped projects · 2 research papers · 9.53 CGPA · full-stack + deep learning + cybersecurity range. Currently building recruitment AI at Infosys SpringBoard — she'd probably automate your onboarding, too.
+<br><br>
+<span class="dim">next step:</span> <span class="clickable-cmd" data-cmd="type contact.bat">type contact.bat</span>
 </div>`;
 }
 
 const commands = {
   "help": () => HELP_HTML,
-  "neofetch": renderNeofetch,
+  "systeminfo": renderSysinfo,
   "whoami": renderWhoami,
-  "ls": renderLS,
-  "ls projects/": () => renderProjects("all"),
-  "cat experience.log": renderExperience,
-  "cat research.md": renderResearch,
-  "cat skills.yaml": renderSkills,
-  "ls certifications/": renderCerts,
-  "cat achievements.txt": renderAchievements,
-  "cat leadership.txt": renderLeadership,
-  "cat contact.sh": renderContact,
-  "sudo hire rishita": renderHire,
-  "home": () => `<div class="out">${renderNeofetch()}
+  "ver": () => `<div class="out">${esc(VER)}</div>`,
+  "dir": renderDir,
+  "dir projects": () => renderProjects("all"),
+  "type experience.log": renderExperience,
+  "type research.md": renderResearch,
+  "type skills.yaml": renderSkills,
+  "dir certifications": renderCerts,
+  "type achievements.txt": renderAchievements,
+  "type leadership.txt": renderLeadership,
+  "type contact.bat": renderContact,
+  "start resume.pdf": () => {
+    window.open(D.resume, "_blank", "noopener");
+    return `<div class="out dim">Opening resume.pdf ...</div>`;
+  },
+  "hire rishita": renderHire,
+  "home": () => `<div class="out">${renderSysinfo()}
 <span class="dim">Type</span> <span class="clickable-cmd" data-cmd="help">help</span><span class="dim">for the full command list, or click a tab above.</span></div>`
 };
+
+const ALIASES = {
+  "type about":"whoami", "about":"whoami", "who":"whoami",
+  "neofetch":"systeminfo", "neofetch --off":"systeminfo", "sysinfo":"systeminfo",
+  "dir .":"dir",
+  "projects":"dir projects",
+  "experience":"type experience.log", "research":"type research.md",
+  "skills":"type skills.yaml",
+  "certs":"dir certifications", "certifications":"dir certifications",
+  "achievements":"type achievements.txt", "leadership":"type leadership.txt",
+  "contact":"type contact.bat", "contact.bat":"type contact.bat", "resume":"type contact.bat",
+  "resume.pdf":"start resume.pdf",
+  "man":"help", "h":"help", "?":"help", "/?":"help",
+  "hire":"hire rishita"
+};
+
+/* map Linux-style and Windows-style input onto one canonical command */
+function normalize(raw){
+  let s = raw.trim().replace(/\\/g,"/").replace(/\s+/g," ").toLowerCase();
+  s = s.replace(/\/(?= |$)/g,"");
+  s = s.replace(/^ls( -la| -l| \.)?(?= |$)/,"dir");
+  s = s.replace(/^cat /,"type ");
+  s = s.replace(/^cd (projects|certifications|certs)$/,"dir $1");
+  s = s.replace(/^dir certs$/,"dir certifications");
+  s = s.replace(/contact\.sh$/,"contact.bat");
+  s = s.replace(/^start resume(\.pdf)?$/,"start resume.pdf");
+  if(/^(sudo )?hire( rishita)?(\.exe)?$/.test(s) || s.startsWith("runas")) s = "hire rishita";
+  return s;
+}
 
 function runCommand(raw){
   const cmdText = raw.trim();
   if(!cmdText) return;
   promptEcho(cmdText);
 
-  if(cmdText === "clear"){
+  let s = normalize(cmdText);
+
+  if(s === "cls" || s === "clear" || s === "reset"){
     term().innerHTML = "";
     return;
   }
 
-  const lower = cmdText.toLowerCase();
-
-  if(lower.startsWith("ls projects/")){
-    const parts = lower.split(" ");
-    const filter = parts.length > 2 ? parts[2] : "all";
-    appendHTML(renderProjects(filter));
+  if(s === "dir projects" || s.startsWith("dir projects ")){
+    const cats = ["all","ai","security","data","iot","web"];
+    const f = s.split(" ")[2] || "all";
+    appendHTML(renderProjects(cats.includes(f) ? f : "all"));
     return;
   }
 
-  if(commands[lower]){
-    appendHTML(commands[lower]());
+  if(ALIASES[s]) s = ALIASES[s];
+
+  if(commands[s]){
+    appendHTML(commands[s]());
     return;
   }
 
-  // fuzzy aliases
-  const aliases = {
-    "ls -la": "ls", "ls -l": "ls", "ls .": "ls",
-    "cat about": "whoami", "about": "whoami", "who": "whoami",
-    "projects": "ls projects/", "cd projects": "ls projects/", "cd projects/": "ls projects/",
-    "experience": "cat experience.log", "research": "cat research.md",
-    "skills": "cat skills.yaml", "certs": "ls certifications/", "certifications": "ls certifications/",
-    "achievements": "cat achievements.txt", "leadership": "cat leadership.txt",
-    "contact": "cat contact.sh", "resume": "cat contact.sh",
-    "man": "help", "h": "help", "?": "help",
-    "hire": "sudo hire rishita", "hire rishita": "sudo hire rishita",
-    "cls": "clear", "reset": "clear", "neofetch --off": "neofetch"
-  };
-  if(aliases[lower]){
-    appendHTML(commands[aliases[lower]]());
+  if(s === "cd"){
+    appendHTML(`<div class="out">C:\\Users\\Rishita</div>`);
     return;
   }
 
-  appendHTML(`<div class="out red">bash: ${esc(cmdText)}: command not found<br><span class="dim">try</span> <span class="clickable-cmd" data-cmd="help">help</span></div>`);
+  if(s.startsWith("echo")){
+    appendHTML(`<div class="out">${esc(cmdText.slice(4).replace(/^ /,"")) || "ECHO is on."}</div>`);
+    return;
+  }
+
+  if(s === "type"){
+    appendHTML(`<div class="out">The syntax of the command is incorrect.</div>`);
+    return;
+  }
+
+  if(s.startsWith("type ")){
+    appendHTML(`<div class="out">The system cannot find the file specified.<br><span class="dim">try</span> <span class="clickable-cmd" data-cmd="dir">dir</span></div>`);
+    return;
+  }
+
+  const name = cmdText.split(/\s+/)[0];
+  appendHTML(`<div class="out">'${esc(name)}' is not recognized as an internal or external command,<br>operable program or batch file.<br><span class="dim">try</span> <span class="clickable-cmd" data-cmd="help">help</span></div>`);
 }
 
 let cmdWrapEl = null;
@@ -793,10 +819,9 @@ function moveInputToBottom(){
 document.addEventListener("click", (e) => {
   const cc = e.target.closest(".clickable-cmd");
   if(cc){
-    const c = cc.dataset.cmd;
     const ci = document.getElementById("cmdinput");
     if(ci) ci.value = "";
-    runCommand(c);
+    runCommand(cc.dataset.cmd);
     moveInputToBottom();
     return;
   }
@@ -822,22 +847,23 @@ document.addEventListener("click", (e) => {
 
 /* input form */
 function initTerminal(){
-  appendHTML(`<div class="out dim">Welcome to rishita-os 26.09 LTS. Type <span class="clickable-cmd" data-cmd="help">help</span>to get started.</div>`);
-  appendHTML(renderNeofetch());
+  appendHTML(renderSysinfo());
+  appendHTML(`<div class="out dim">Type <span class="clickable-cmd" data-cmd="help">help</span>to get started, or click a tab above.</div>`);
 
   const wrap = document.createElement("form");
   wrap.id = "cmdform";
   wrap.innerHTML = `
-    <span class="ps">rishita@vit-chennai<span class="sym">:</span><span class="path">~</span><span class="sym">$</span></span>
-    <input id="cmdinput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" />
+    <span class="ps">${esc(PROMPT)}</span>
+    <input id="cmdinput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Command input" />
   `;
   term().appendChild(wrap);
   cmdWrapEl = wrap;
 
   const input = wrap.querySelector("#cmdinput");
   input.focus();
-  document.getElementById("terminal").addEventListener("click", (e) => {
+  term().addEventListener("click", (e) => {
     if(e.target.closest("a, .link, [data-open], .clickable-cmd, .tab")) return;
+    if(window.getSelection && String(window.getSelection())) return;
     input.focus();
   });
 
@@ -867,19 +893,21 @@ function initTerminal(){
     } else if(e.key === "Tab"){
       e.preventDefault();
       const partial = input.value.toLowerCase();
-      const all = Object.keys(commands);
+      if(!partial) return;
+      const all = Object.keys(commands).filter(c => c !== "home");
       const match = all.find(c => c.startsWith(partial));
       if(match) input.value = match;
     }
   });
 }
 
-/* clock */
+/* taskbar clock */
 function tickClock(){
-  const el = document.getElementById("clock");
-  if(!el) return;
+  const c = document.getElementById("clock"), dt = document.getElementById("date");
+  if(!c || !dt) return;
   const d = new Date();
-  el.textContent = d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}) + " IST";
+  c.textContent = fmtTime(d);
+  dt.textContent = fmtDate(d);
 }
 setInterval(tickClock, 1000);
 tickClock();
