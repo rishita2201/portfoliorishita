@@ -89,7 +89,7 @@ body{
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
 
 .tabbar{
-  height:32px;flex-shrink:0;display:flex;align-items:stretch;gap:0;
+  min-height:32px;flex-shrink:0;display:flex;align-items:stretch;gap:0;
   background:#0a0d0b;border-bottom:1px solid var(--border);
   overflow-x:auto;
 }
@@ -181,13 +181,54 @@ form#cmdform{display:flex;align-items:center;gap:8px;margin-top:6px;}
 .statusbar span.k{color:var(--crt-green-dim);}
 
 @media (max-width:640px){
-  body{font-size:13.5px;}
+  body{font-size:13.5px;overflow-x:hidden;}
   #terminal{padding:14px 12px 90px;}
   .titlebar .tb-title{display:none;}
   .card-grid{grid-template-columns:1fr;}
-  .neofetch-row{gap:16px;}
+  .neofetch-row{flex-direction:column;gap:14px;}
   .bar-track{width:120px;}
   #cmdinput{font-size:16px;}
+
+  /* No more sideways-swipe tab strip: wrap tabs onto as many rows as
+     needed so every command is reachable by tapping, not scrolling. */
+  .tabbar{
+    overflow-x:visible;flex-wrap:wrap;height:auto;
+    border-bottom:1px solid var(--border-hi);
+  }
+  .tab{
+    flex:0 0 auto;padding:7px 10px;font-size:11px;
+    border-bottom:1px solid var(--border);
+  }
+  .tab .tag{margin-right:4px;}
+
+  /* Rigid multi-column tables don't fit narrow screens: table auto-layout
+     squeezes each column so thin that text wraps one word per line.
+     Turn every row into a wrapping flex line instead, so cells keep their
+     natural (min-content) width and only wrap where the text actually
+     needs to. */
+  table.ftable, table.ftable tbody{display:block;width:100%;}
+  table.ftable tr{
+    display:flex;flex-wrap:wrap;align-items:baseline;
+    column-gap:8px;row-gap:2px;
+    width:100%;padding:4px 0;
+  }
+  table.ftable td{
+    display:block;padding:0;white-space:normal;
+    overflow-wrap:break-word;word-break:normal;
+    flex:0 1 auto;min-width:0;
+  }
+  /* labels / short fixed tokens should never break mid-word */
+  table.kv-table td:first-child,
+  table.ftable tr.ftable-head td,
+  table.ftable td.cyan:first-child,
+  table.ftable td.dim:first-child,
+  table.ftable td.amber:first-child{white-space:nowrap;}
+
+  table.ftable tr:not(.ftable-head){border-bottom:1px solid var(--border);}
+  table.ftable tr:last-child{border-bottom:none;}
+  table.ftable tr.ftable-head{border-bottom:1px solid var(--border-hi);margin-bottom:2px;}
+
+  .pcard .ph{flex-wrap:wrap;}
 }
 @media (max-width:400px){
   .bar-track{width:90px;}
@@ -240,7 +281,7 @@ const D = {
   role: "AI/ML Engineer — Full-Stack · Applied Deep Learning · Cybersecurity",
   location: "Chennai, India",
   study: "B.Tech CSE — AI & ML, VIT University Chennai (2024–2028)",
-  cgpa: "9.53 / 10 (through Year 2)",
+  cgpa: "9.53 / 10",
   current: "AIML Intern, Infosys SpringBoard",
   langs: "English, Hindi, Tamil, German",
   email: "rishitasrisrimal@gmail.com",
